@@ -70,6 +70,7 @@ export function FloatingParticles({ mood = 'default', count = 15 }: FloatingPart
         const distance = Math.sqrt(dx * dx + dy * dy);
         const repelStrength = Math.max(0, 100 - distance) / 100;
 
+        // Dynamic positioning and sizing - must use inline styles for runtime values
         return (
           <motion.div
             key={particle.id}
@@ -99,7 +100,7 @@ export function FloatingParticles({ mood = 'default', count = 15 }: FloatingPart
               ease: 'easeInOut',
             }}
           >
-            {/* Center crease line (characteristic of coffee bean) */}
+            {/* Center crease line (characteristic of coffee bean) - inline styles for precise positioning */}
             <div
               style={{
                 position: 'absolute',

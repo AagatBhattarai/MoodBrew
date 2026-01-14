@@ -124,6 +124,7 @@ export function FlavorWheel() {
                   whileHover={{ scale: 1.3, zIndex: 10 }}
                   whileTap={{ scale: 0.9 }}
                 >
+                  {/* Dynamic color - must use inline style for runtime color value */}
                   <motion.div
                     className="w-16 h-16 rounded-full flex items-center justify-center text-3xl shadow-lg cursor-pointer"
                     style={{ backgroundColor: flavor.color }}
@@ -153,6 +154,7 @@ export function FlavorWheel() {
                   style={{ borderColor: selectedFlavor.color }}
                 >
                   <div className="flex items-center gap-md mb-md">
+                    {/* Dynamic color - must use inline style for runtime color value */}
                     <div
                       className="w-16 h-16 rounded-full flex items-center justify-center text-4xl"
                       style={{ backgroundColor: selectedFlavor.color }}

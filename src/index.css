@@ -139,6 +139,11 @@ body::before {
     }
   }
 
+  /* Typography utilities */
+  .font-playfair {
+    font-family: 'Playfair Display', serif;
+  }
+
   /* ✨ PREMIUM SHADOW SYSTEM */
   .floating-shadow {
     box-shadow: 

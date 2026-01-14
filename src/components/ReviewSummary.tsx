@@ -153,21 +153,27 @@ export function ReviewSummary({ summary, isLoading = false, reviewCount }: Revie
         >
           <motion.div className="flex flex-col gap-sm" variants={staggerItem}>
             <h4 className="text-body-lg font-semibold text-text-primary">Key Points</h4>
-            <div className="flex flex-col gap-xs" role="list">
-              {summary.keyPoints.map((point, i) => (
-                <motion.div 
-                  key={i} 
-                  role="listitem"
-                  className="flex items-start gap-sm text-body-sm text-text-secondary"
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.7 + i * 0.1 }}
-                >
-                  <span className="mt-1 text-primary">•</span>
-                  <span>{point}</span>
-                </motion.div>
+            <ul className="flex flex-col gap-xs list-none">
+              {summary.keyPoints?.map((point, i) => (
+                <li key={i} className="flex items-start gap-sm text-body-sm text-text-secondary">
+                  <motion.span
+                    className="mt-1 text-primary"
+                    initial={{ opacity: 0, scale: 0 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.7 + i * 0.1 }}
+                  >
+                    •
+                  </motion.span>
+                  <motion.span
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.7 + i * 0.1 }}
+                  >
+                    {point}
+                  </motion.span>
+                </li>
               ))}
-            </div>
+            </ul>
           </motion.div>
 
           <motion.div className="flex flex-col gap-sm" variants={staggerItem}>

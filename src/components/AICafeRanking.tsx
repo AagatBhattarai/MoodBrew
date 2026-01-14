@@ -162,20 +162,22 @@ export function AICafeRanking({
 
               {/* Strengths & Improvements */}
               <div className="flex flex-col gap-sm">
-                <div className="flex flex-col gap-xs">
-                  <p className="text-body-xs font-bold uppercase tracking-wider text-primary">
-                    ✨ Strengths
-                  </p>
-                  <ul className="flex flex-col gap-1">
-                    {cafe.strengths.slice(0, 2).map((strength, i) => (
-                      <li key={i} className="flex items-start gap-2 text-body-xs text-text-secondary">
-                        <span className="text-primary mt-0.5">•</span>
-                        <span>{strength}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-                {cafe.improvements.length > 0 && (
+                {cafe.strengths && cafe.strengths.length > 0 && (
+                  <div className="flex flex-col gap-xs">
+                    <p className="text-body-xs font-bold uppercase tracking-wider text-primary">
+                      ✨ Strengths
+                    </p>
+                    <ul className="flex flex-col gap-1">
+                      {cafe.strengths.slice(0, 2).map((strength, i) => (
+                        <li key={i} className="flex items-start gap-2 text-body-xs text-text-secondary">
+                          <span className="text-primary mt-0.5">•</span>
+                          <span>{strength}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                {cafe.improvements && cafe.improvements.length > 0 && (
                   <div className="flex flex-col gap-xs">
                     <p className="text-body-xs font-bold uppercase tracking-wider text-secondary">
                       📈 Potential

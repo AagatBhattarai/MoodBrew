@@ -83,8 +83,7 @@ function AppRoutes() {
           <div className="flex items-center justify-between">
             {/* Logo with shimmer effect */}
             <motion.h1 
-              className="text-6xl font-black gradient-text-animated cursor-pointer"
-              style={{ fontFamily: 'Playfair Display, serif' }}
+              className="text-6xl font-black gradient-text-animated cursor-pointer font-playfair"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
@@ -128,7 +127,7 @@ function AppRoutes() {
             >
               ☕
             </motion.div>
-            <h2 className="text-5xl font-bold text-shimmer" style={{ fontFamily: 'Playfair Display, serif' }}>
+            <h2 className="text-5xl font-bold text-shimmer font-playfair">
               {screen.title}
             </h2>
           </div>
@@ -365,7 +364,7 @@ function HomeScreen({ data, interactions, onNavigate, onShowOrders }: HomeScreen
                   ✨ Welcome to MoodBrew
                 </span>
               </motion.div>
-              <h2 className="text-6xl font-black mb-4 gradient-text-animated" style={{ fontFamily: 'Playfair Display, serif' }}>
+              <h2 className="text-6xl font-black mb-4 gradient-text-animated font-playfair">
                 {greetingText}
               </h2>
               <p className="text-2xl text-text-secondary mb-6 leading-relaxed">
@@ -2118,6 +2117,7 @@ function CafeDetailScreen({ data, onBack }: CafeDetailProps) {
       </div>
 
       <Card className="overflow-hidden">
+        {/* Dynamic background image - must use inline style for runtime URL */}
         <div
           className="h-56 w-full bg-cover bg-center"
           style={{ backgroundImage: `url(${content.banner.image})` }}
@@ -2181,11 +2181,10 @@ function CafeDetailScreen({ data, onBack }: CafeDetailProps) {
                   src={`https://www.google.com/maps?q=${encodeURIComponent(content.map.address)}&output=embed&zoom=15`}
                   width="100%"
                   height="100%"
-                  style={{ border: 0 }}
                   allowFullScreen
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
-                  className="w-full h-full"
+                  className="w-full h-full border-0"
                   title={content.map.title}
                 />
                 <div className="absolute top-2 right-2 bg-surface/90 backdrop-blur-sm rounded-lg px-2 py-1 text-body-xs text-text-secondary">
