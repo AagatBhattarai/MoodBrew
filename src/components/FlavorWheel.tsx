@@ -78,9 +78,9 @@ export function FlavorWheel() {
           </p>
         </div>
 
-        <div className="flex flex-col lg:flex-row gap-lg items-center">
+        <div className="flex flex-col xl:flex-row gap-8 items-center justify-center">
           {/* Flavor Wheel */}
-          <div className="relative w-80 h-80 mx-auto">
+          <div className="relative w-80 h-80 shrink-0">
             {/* Center circle */}
             <motion.div
               className="absolute inset-0 m-auto w-64 h-64 rounded-full"
@@ -150,7 +150,7 @@ export function FlavorWheel() {
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -20 }}
-                  className="rounded-xl p-lg border-2"
+                  className="rounded-xl p-lg border-2 w-full max-w-md"
                   style={{ borderColor: selectedFlavor.color }}
                 >
                   <div className="flex items-center gap-md mb-md">

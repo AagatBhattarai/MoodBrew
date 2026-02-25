@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Card } from './Card';
+import { api } from '../lib/api';
 
 interface Stat {
   label: string;
@@ -10,7 +11,17 @@ interface Stat {
   unit?: string;
 }
 
+interface UserStats {
+  xp: number;
+  points: number;
+  level: number;
+  total_orders: number;
+  total_spent: number;
+  streak_days: number;
+}
+
 export function LiveStats() {
+  const [userStats, setUserStats] = useState<UserStats | null>(null);
   const [stats, setStats] = useState<Stat[]>([
     { label: 'Orders Today', value: 0, icon: '☕', color: '#4A2C2A', unit: '' },
     { label: 'Active Users', value: 0, icon: '👥', color: '#FF6B35', unit: '' },
@@ -21,9 +32,21 @@ export function LiveStats() {
   const [recentOrders, setRecentOrders] = useState<string[]>([]);
   const [trendingDrink, setTrendingDrink] = useState('Caramel Latte');
 
-  // Simulate live updates
+  const fetchUserStats = useCallback(async () => {
+    try {
+      const data = await api.stats.get();
+      if (data) setUserStats(data);
+    } catch { /* not logged in */ }
+  }, []);
+
   useEffect(() => {
-    // Animate initial values
+    fetchUserStats();
+    const poll = setInterval(fetchUserStats, 30000);
+    return () => clearInterval(poll);
+  }, [fetchUserStats]);
+
+  // Simulate live cafe activity
+  useEffect(() => {
     const timeout = setTimeout(() => {
       setStats([
         { label: 'Orders Today', value: 247, icon: '☕', color: '#4A2C2A' },
@@ -33,7 +56,6 @@ export function LiveStats() {
       ]);
     }, 500);
 
-    // Simulate real-time order updates
     const interval = setInterval(() => {
       setStats(prev => [
         { ...prev[0], value: prev[0].value + Math.floor(Math.random() * 3) },
@@ -41,29 +63,12 @@ export function LiveStats() {
         prev[2],
         prev[3],
       ]);
-
-      // Add random orders
-      const drinks = [
-        'Caramel Latte',
-        'Espresso',
-        'Cappuccino',
-        'Mocha',
-        'Americano',
-        'Flat White',
-      ];
-      const randomDrink = drinks[Math.floor(Math.random() * drinks.length)];
-      setRecentOrders(prev => [randomDrink, ...prev].slice(0, 5));
-      
-      // Update trending
-      if (Math.random() > 0.7) {
-        setTrendingDrink(drinks[Math.floor(Math.random() * drinks.length)]);
-      }
+      const drinks = ['Caramel Latte', 'Espresso', 'Cappuccino', 'Mocha', 'Americano', 'Flat White'];
+      setRecentOrders(prev => [drinks[Math.floor(Math.random() * drinks.length)], ...prev].slice(0, 5));
+      if (Math.random() > 0.7) setTrendingDrink(drinks[Math.floor(Math.random() * drinks.length)]);
     }, 3000);
 
-    return () => {
-      clearTimeout(timeout);
-      clearInterval(interval);
-    };
+    return () => { clearTimeout(timeout); clearInterval(interval); };
   }, []);
 
   return (
@@ -89,6 +94,52 @@ export function LiveStats() {
             <span className="text-body-xs font-semibold text-green-700">LIVE</span>
           </motion.div>
         </div>
+
+        {/* User Stats Section */}
+        {userStats && (
+          <motion.div
+            className="p-4 rounded-2xl bg-primary/5 border border-primary/10 mb-2"
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+          >
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-2">
+                <span className="text-xl">🏆</span>
+                <span className="text-body-sm font-bold text-primary">Your Progress</span>
+              </div>
+              <span className="text-body-xs font-bold text-secondary uppercase">Level {userStats.level}</span>
+            </div>
+            <div className="grid grid-cols-3 gap-4">
+              <div className="text-center">
+                <p className="text-h3 font-black text-text-primary">{userStats.xp.toLocaleString()}</p>
+                <p className="text-body-xs text-text-secondary uppercase">Total XP</p>
+              </div>
+              <div className="text-center border-x border-primary/10">
+                <p className="text-h3 font-black text-primary">{userStats.points.toLocaleString()}</p>
+                <p className="text-body-xs text-text-secondary uppercase">Points</p>
+              </div>
+              <div className="text-center">
+                <p className="text-h3 font-black text-secondary">{userStats.streak_days}d</p>
+                <p className="text-body-xs text-text-secondary uppercase">Streak</p>
+              </div>
+            </div>
+            {/* Progress Bar */}
+            <div className="mt-3">
+              <div className="flex justify-between text-body-xs mb-1">
+                <span className="text-text-secondary">Progress to Level {userStats.level + 1}</span>
+                <span className="text-primary font-bold">{userStats.xp % 500} / 500 XP</span>
+              </div>
+              <div className="h-1.5 w-full bg-primary/10 rounded-full overflow-hidden">
+                <motion.div
+                  className="h-full bg-primary"
+                  initial={{ width: 0 }}
+                  animate={{ width: `${(userStats.xp % 500) / 5}%` }}
+                  transition={{ duration: 1, ease: 'easeOut' }}
+                />
+              </div>
+            </div>
+          </motion.div>
+        )}
 
         {/* Stats Grid */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-md">

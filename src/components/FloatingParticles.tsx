@@ -30,15 +30,14 @@ const moodParticles = {
 
 export function FloatingParticles({ mood = 'default', count = 15 }: FloatingParticlesProps) {
   const [particles, setParticles] = useState<Particle[]>([]);
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-
+  // Mouse interaction removed for performance
   useEffect(() => {
     const emojis = moodParticles[mood as keyof typeof moodParticles] || moodParticles.default;
-    
+
     const newParticles = Array.from({ length: count }, (_, i) => ({
       id: i,
       // Position only in side margins: 0-12% (left) or 88-100% (right)
-      x: i % 2 === 0 
+      x: i % 2 === 0
         ? Math.random() * 12  // Left margin
         : 88 + Math.random() * 12,  // Right margin
       y: Math.random() * 100,
@@ -52,23 +51,10 @@ export function FloatingParticles({ mood = 'default', count = 15 }: FloatingPart
     setParticles(newParticles);
   }, [mood, count]);
 
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      setMousePos({ x: e.clientX, y: e.clientY });
-    };
-
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, []);
-
   return (
     <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
       {particles.map((particle) => {
-        // Calculate distance from mouse
-        const dx = (particle.x / 100) * window.innerWidth - mousePos.x;
-        const dy = (particle.y / 100) * window.innerHeight - mousePos.y;
-        const distance = Math.sqrt(dx * dx + dy * dy);
-        const repelStrength = Math.max(0, 100 - distance) / 100;
+
 
         // Dynamic positioning and sizing - must use inline styles for runtime values
         return (
@@ -89,7 +75,7 @@ export function FloatingParticles({ mood = 'default', count = 15 }: FloatingPart
             animate={{
               opacity: [0.6, 0.85, 0.6], // More visible opacity range
               y: [0, -30, 0],
-              x: repelStrength > 0 ? (dx > 0 ? 20 : -20) * repelStrength : 0,
+              x: 0,
               rotate: [0, 360],
               scale: [1, 1.1, 1],
             }}
