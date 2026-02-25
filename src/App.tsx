@@ -325,11 +325,17 @@ function HomeScreen({
 }: HomeScreenProps) {
   const [activeTab, setActiveTab] = useState<string>(data.tabs[0].id);
   const [apiProducts, setApiProducts] = useState<Product[]>([]);
+  const [userStats, setUserStats] = useState<any>(null);
   const { profile } = useAuth();
 
   useEffect(() => {
     api.products.getAll(selectedMood || undefined)
       .then(setApiProducts)
+      .catch(console.error);
+
+    // Fetch user stats for points
+    api.stats.get()
+      .then(setUserStats)
       .catch(console.error);
   }, [selectedMood]);
 
@@ -366,6 +372,7 @@ function HomeScreen({
   const greeting = getTimeBasedGreeting();
   const userName = profile?.name || "Guest";
   const greetingText = `${greeting}, ${userName}!`;
+  const points = userStats?.points ?? 0;
 
   return (
     <div className="relative">
@@ -402,7 +409,7 @@ function HomeScreen({
               </p>
               <div className="flex gap-4">
                 <Button className="px-8 py-4 text-lg">
-                  🎁 Redeem Points: {data.header.points}
+                  🎁 Redeem Points: {points} Points
                 </Button>
               </div>
             </motion.div>

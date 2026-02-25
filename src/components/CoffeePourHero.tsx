@@ -1,5 +1,7 @@
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
+import { Button } from './Button';
+import { Badge } from './Badge';
 
 export function CoffeePourHero() {
   const [timeOfDay, setTimeOfDay] = useState('morning');
@@ -12,168 +14,122 @@ export function CoffeePourHero() {
   }, []);
 
   const drinks = {
-    morning: { name: 'Morning Espresso', color: '#4A2C2A' },
-    afternoon: { name: 'Afternoon Latte', color: '#6F4E37' },
-    evening: { name: 'Evening Mocha', color: '#3E2723' },
+    morning: { name: 'Morning Espresso', adjective: 'revitalizing', color: '#4A2C2A' },
+    afternoon: { name: 'Afternoon Latte', adjective: 'silky-smooth', color: '#6F4E37' },
+    evening: { name: 'Evening Mocha', adjective: 'comforting', color: '#3E2723' },
   };
 
   const currentDrink = drinks[timeOfDay as keyof typeof drinks];
 
   return (
-    <div className="relative h-[400px] overflow-hidden rounded-3xl bg-gradient-to-br from-primary/10 via-secondary/5 to-accent/10">
-      {/* Background Steam */}
-      {[...Array(5)].map((_, i) => (
+    <div className="relative min-h-[500px] overflow-hidden rounded-[2.5rem] bg-gradient-to-br from-primary/10 via-background to-secondary/10 border border-primary/5 shadow-elevated p-8 md:p-12 lg:p-16">
+      {/* 🌪️ Dynamic Ambient Background */}
+      <div className="absolute inset-0 z-0 opacity-40">
         <motion.div
-          key={i}
-          className="absolute w-32 h-32 rounded-full blur-3xl"
-          style={{
-            background: 'radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%)',
-            left: `${20 + i * 15}%`,
-            bottom: '30%',
-          }}
+          className="absolute -top-[10%] -left-[10%] w-[50%] h-[50%] bg-primary/20 rounded-full blur-[100px]"
           animate={{
-            y: [0, -100, -200],
-            opacity: [0, 0.5, 0],
-            scale: [0.5, 1, 1.5],
+            scale: [1, 1.1, 1],
+            opacity: [0.3, 0.4, 0.3],
           }}
-          transition={{
-            duration: 3 + i,
-            repeat: Infinity,
-            delay: i * 0.5,
-            ease: 'easeOut',
-          }}
+          transition={{ duration: 8, repeat: Infinity }}
         />
-      ))}
-
-      <div className="relative z-10 flex items-center justify-between h-full px-xl">
-        {/* Left: Text Content */}
         <motion.div
-          className="flex-1"
-          initial={{ opacity: 0, x: -50 }}
+          className="absolute -bottom-[10%] -right-[10%] w-[50%] h-[50%] bg-secondary/20 rounded-full blur-[100px]"
+          animate={{
+            scale: [1.1, 1, 1.1],
+            opacity: [0.3, 0.4, 0.3],
+          }}
+          transition={{ duration: 10, repeat: Infinity }}
+        />
+      </div>
+
+      <div className="relative z-10 grid lg:grid-cols-2 gap-12 items-center h-full">
+        {/* 📝 Left Content: Cinematic Typography */}
+        <motion.div
+          className="flex flex-col items-start gap-6"
+          initial={{ opacity: 0, x: -60 }}
           animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8 }}
+          transition={{ duration: 1 }}
         >
           <motion.div
-            className="inline-block px-4 py-2 rounded-pill bg-primary/10 mb-4"
-            animate={{
-              scale: [1, 1.05, 1],
-            }}
-            transition={{
-              duration: 2,
-              repeat: Infinity,
-            }}
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.2 }}
           >
-            <span className="text-body-sm font-semibold text-primary">
-              ✨ Perfect for {timeOfDay}
-            </span>
+            <Badge variant="discount" className="px-4 py-1.5 text-body-xs font-black tracking-widest uppercase">
+              ✨ {timeOfDay} Ritual
+            </Badge>
           </motion.div>
-          
-          <h1 className="text-6xl font-bold text-text-primary mb-4 leading-tight">
-            Your Perfect
-            <br />
-            <span className="bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
+
+          <h1 className="text-5xl md:text-6xl lg:text-7xl font-black text-text-primary leading-[1.1] font-playfair">
+            Your Perfect <br />
+            <span className="gradient-text-animated">
               {currentDrink.name}
             </span>
           </h1>
-          
-          <p className="text-body-lg text-text-secondary mb-6 max-w-md">
-            Handcrafted with love, brewed to perfection, served with a smile ☕
+
+          <p className="text-lg md:text-xl text-text-secondary max-w-lg leading-relaxed">
+            Experience the {currentDrink.adjective} notes of ethically sourced beans,
+            handcrafted for your {timeOfDay} mood.
           </p>
 
-          <motion.button
-            className="px-8 py-4 rounded-xl bg-primary text-surface font-semibold text-body-lg shadow-lg"
-            whileHover={{ scale: 1.05, boxShadow: '0 20px 40px rgba(74, 44, 42, 0.3)' }}
-            whileTap={{ scale: 0.95 }}
+          <Button
+            className="px-10 py-5 text-xl font-bold rounded-2xl shadow-elevated pulse-glow mt-2"
           >
             Order Now →
-          </motion.button>
+          </Button>
         </motion.div>
 
-        {/* Right: Animated Coffee Cup */}
+        {/* ☕ Right Content: Aesthetic cup */}
         <motion.div
-          className="relative w-64 h-64"
+          className="relative flex justify-center lg:justify-end"
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
+          transition={{ duration: 1, delay: 0.3 }}
         >
-          {/* Cup */}
-          <motion.div
-            className="absolute inset-0"
-            animate={{
-              y: [0, -10, 0],
-            }}
-            transition={{
-              duration: 3,
-              repeat: Infinity,
-              ease: 'easeInOut',
-            }}
-          >
-            {/* Coffee Cup SVG */}
-            <div className="relative w-full h-full flex items-center justify-center">
-              <motion.div
-                className="text-9xl"
-                animate={{
-                  rotate: [0, 5, -5, 0],
-                }}
-                transition={{
-                  duration: 4,
-                  repeat: Infinity,
-                  ease: 'easeInOut',
-                }}
-              >
-                ☕
-              </motion.div>
+          <div className="relative w-64 h-64 md:w-80 md:h-80 flex items-center justify-center">
+            {/* Ambient Shadow */}
+            <div className="absolute inset-0 bg-primary/10 rounded-full blur-[60px]" />
 
-              {/* Pour Animation */}
-              <motion.div
-                className="absolute -top-12 left-1/2 transform -translate-x-1/2"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 1 }}
-              >
-                <svg width="40" height="80" viewBox="0 0 40 80">
-                  <motion.path
-                    d="M20 0 Q15 40, 20 80"
-                    fill="none"
-                    stroke={currentDrink.color}
-                    strokeWidth="8"
-                    strokeLinecap="round"
-                    initial={{ pathLength: 0, opacity: 0 }}
-                    animate={{ pathLength: [0, 1, 0], opacity: [0, 1, 0] }}
-                    transition={{
-                      duration: 2,
-                      repeat: Infinity,
-                      ease: 'easeInOut',
-                    }}
-                  />
-                </svg>
-              </motion.div>
+            <motion.div
+              className="relative text-[10rem] md:text-[14rem] drop-shadow-2xl"
+              animate={{
+                y: [0, -15, 0],
+                rotate: [0, 2, -2, 0],
+              }}
+              transition={{
+                duration: 6,
+                repeat: Infinity,
+                ease: 'easeInOut',
+              }}
+            >
+              ☕
 
-              {/* Sparkles */}
+              {/* Orbital Stars */}
               {[...Array(6)].map((_, i) => (
                 <motion.div
                   key={i}
-                  className="absolute text-2xl"
+                  className="absolute text-2xl md:text-3xl"
                   style={{
-                    left: `${50 + Math.cos(i * 60 * Math.PI / 180) * 100}px`,
-                    top: `${50 + Math.sin(i * 60 * Math.PI / 180) * 100}px`,
+                    left: `${50 + Math.cos(i * 60 * Math.PI / 180) * 80}%`,
+                    top: `${50 + Math.sin(i * 60 * Math.PI / 180) * 80}%`,
                   }}
                   animate={{
                     scale: [0, 1, 0],
-                    opacity: [0, 1, 0],
-                    rotate: [0, 180, 360],
+                    opacity: [0, 0.7, 0],
+                    rotate: [0, 180],
                   }}
                   transition={{
-                    duration: 2,
+                    duration: 2.5,
                     repeat: Infinity,
-                    delay: i * 0.2,
+                    delay: i * 0.3,
                   }}
                 >
                   ✨
                 </motion.div>
               ))}
-            </div>
-          </motion.div>
+            </motion.div>
+          </div>
         </motion.div>
       </div>
     </div>
